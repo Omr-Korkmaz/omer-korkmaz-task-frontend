@@ -9,7 +9,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import styles from "./BeerList.module.css";
 
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 15;
 
 
 const BeerList = () => {
