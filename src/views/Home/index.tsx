@@ -1,26 +1,39 @@
-import { useEffect, useState } from 'react';
-import { fetchData } from './utils';
-import { Beer } from '../../types';
-import { Link as RouterLink } from 'react-router-dom';
-import { Button, Checkbox, Paper, TextField, Link } from '@mui/material';
-import styles from './Home.module.css';
+import { useEffect, useState } from "react";
+import { fetchData } from "./utils";
+import { Beer } from "../../types";
+import { Link as RouterLink } from "react-router-dom";
+import { Button, Checkbox, Paper, TextField, Link } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
+import styles from "./Home.module.css";
+
+const ITEMS_PER_PAGE = 5;
 
 const Home = () => {
   const [beerList, setBeerList] = useState<Array<Beer>>([]);
   const [savedList, setSavedList] = useState<Array<Beer>>([]);
-  const [filterText, setFilterText] = useState<string>('');
+  const [filterText, setFilterText] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
+  const totalPages = Math.ceil(beerList.length / ITEMS_PER_PAGE);
 
   // eslint-disable-next-line
   useEffect(fetchData.bind(this, setBeerList), []);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
+    setCurrentPage(1);
   };
 
   const filteredBeerList = beerList.filter((beer) =>
     beer.name.toLowerCase().includes(filterText.toLowerCase())
   );
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+
+  const currentBeerList = filteredBeerList.slice(startIndex, endIndex);
 
   return (
     <article>
@@ -29,18 +42,17 @@ const Home = () => {
           <Paper>
             <div className={styles.listContainer}>
               <div className={styles.listHeader}>
-                {/* <TextField label='Filter...' variant='outlined' /> */}
                 <TextField
-                  label='Filter...'
-                  variant='outlined'
+                  label="Filter..."
+                  variant="outlined"
                   value={filterText}
                   onChange={handleFilterChange}
                 />
-                <Button variant='contained'>Reload list</Button>
+                <Button variant="contained">Reload list</Button>
               </div>
 
               <ul className={styles.list}>
-                {filteredBeerList.map((beer, index) => (
+                {currentBeerList.map((beer, index) => (
                   <li key={index.toString()}>
                     <Checkbox />
                     <Link component={RouterLink} to={`/beer/${beer.id}`}>
@@ -50,16 +62,29 @@ const Home = () => {
                 ))}
               </ul>
 
-              {/* <ul className={styles.list}>
-                {beerList.map((beer, index) => (
-                  <li key={index.toString()}>
-                    <Checkbox />
-                    <Link component={RouterLink} to={`/beer/${beer.id}`}>
-                      {beer.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul> */}
+              <div className={styles.pagination}>
+                <Button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  startIcon={<ArrowBackIcon />}
+                  variant="contained"
+                >
+                  Previous Page
+                </Button>
+                <Button
+                  disabled={endIndex >= filteredBeerList.length}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  endIcon={<ArrowForwardIcon />}
+                  variant="contained"
+                >
+                  Next Page
+                </Button>
+
+                <span>
+                  {" "}
+                  ( Page {currentPage} of {totalPages} ){" "}
+                </span>
+              </div>
             </div>
           </Paper>
 
@@ -67,7 +92,7 @@ const Home = () => {
             <div className={styles.listContainer}>
               <div className={styles.listHeader}>
                 <h3>Saved items</h3>
-                <Button variant='contained' size='small'>
+                <Button variant="contained" size="small">
                   Remove all items
                 </Button>
               </div>

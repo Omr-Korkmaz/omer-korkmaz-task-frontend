@@ -13,3 +13,13 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.pagination {
+
+  margin-top: 30px;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 20px;
+
+}
