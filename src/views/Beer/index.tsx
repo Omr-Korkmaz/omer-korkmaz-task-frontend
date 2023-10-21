@@ -1,31 +1,20 @@
-import { useEffect, useState } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
 import { Beer as IBeer } from "../../types";
 import { fetchData } from "./utils";
 import { useParams } from "react-router-dom";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Collapse,
+  Typography,
+  Box,
+  Divider,
+} from "@mui/material";
 
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import Avatar from "@mui/material/Avatar";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Box, Divider } from "@mui/material";
-
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-
 
 const Beer = () => {
   const [expanded, setExpanded] = React.useState(false);
@@ -40,81 +29,81 @@ const Beer = () => {
   // eslint-disable-next-line
   useEffect(fetchData.bind(this, setBeer, id), [id]);
 
+  const initialItemsToShow = 4;
+
+  const detailsToDisplay = [
+    { label: "Type", value: beer?.brewery_type },
+    { label: "Website", value: beer?.website_url },
+    { label: "Phone", value: beer?.phone },
+    { label: "Country", value: beer?.country },
+    { label: "State", value: beer?.state },
+    { label: "Street", value: beer?.street },
+    { label: "Postal code", value: beer?.postal_code },
+    { label: "Address", value: beer?.address_1 },
+  ];
+
+  const itemsToShow = expanded
+    ? detailsToDisplay
+    : detailsToDisplay.slice(0, initialItemsToShow);
+
   return (
     <article>
       <section>
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 500 }}>
           <CardHeader title={beer?.name} />
 
           <CardContent sx={{ paddingBottom: "0" }}>
             <Box>
-              <Typography>
-                <span style={{ fontWeight: "bold" }}>type:</span>{" "}
-                {beer?.brewery_type}
-              </Typography>
-              <Typography>
-                <Divider sx={{ margin: "10px" }} />
-                <span style={{ fontWeight: "bold" }}>Website:</span>{" "}
-                {beer?.website_url}
-              </Typography>
-              <Typography>
-                <Divider sx={{ margin: "10px" }} />
-                <span style={{ fontWeight: "bold" }}>Phone:</span> {beer?.phone}
-              </Typography>
-              <Typography>
-                <Divider sx={{ margin: "10px" }} />
-                <span style={{ fontWeight: "bold" }}>Country:</span>{" "}
-                {beer?.country}
-              </Typography>
+              {itemsToShow.map((detail, index) => (
+                <Typography key={index}>
+                  <span style={{ fontWeight: "bold" }}>{detail.label}:</span>{" "}
+                  {detail.value}
+                  <Divider sx={{ margin: "10px" }} />
+                </Typography>
+              ))}
             </Box>
           </CardContent>
-          {/* <CardActions disableSpacing> */}
-
-          {/* </CardActions> */}
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent sx={{ paddingTop: "0" }}>
-              <Typography>
-                <Divider sx={{ margin: "10px" }} />
-                <span style={{ fontWeight: "bold" }}>State:</span> {beer?.state}
-              </Typography>
-              <Typography>
-                <Divider sx={{ margin: "10px" }} />
-                <span style={{ fontWeight: "bold" }}>Street:</span>{" "}
-                {beer?.street}
-              </Typography>
-              <Typography>
-                <Divider sx={{ margin: "10px" }} />
-                <span style={{ fontWeight: "bold" }}>Postal code:</span>{" "}
-                {beer?.postal_code}
-              </Typography>
-              <Typography>
-                <Divider sx={{ margin: "10px" }} />
-                <span style={{ fontWeight: "bold" }}>Address:</span>{" "}
-                {beer?.address_1}
-              </Typography>
+              {detailsToDisplay
+                .slice(initialItemsToShow)
+                .map((detail, index) => (
+                  <Typography key={index}>
+                    <span style={{ fontWeight: "bold" }}>{detail.label}:</span>{" "}
+                    {detail.value}
+                    <Divider sx={{ margin: "10px" }} />
+                  </Typography>
+                ))}
             </CardContent>
           </Collapse>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItem: "center",
-              backgroundColor: "ButtonFace",
-            }}
-          >
-            <Typography sx={{ margin: "auto 0" }}>
-              {expanded ? "Show Less" : "Show More"}
-            </Typography>
-            <IconButton
-              onClick={handleExpandClick}
-              aria-expanded={expanded}
-              aria-label="show more"
-            >
-              <ExpandMoreIcon   sx={{transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)'}} />
-            </IconButton>
-          </Box>
+          <CardActions>
+            {detailsToDisplay.length > initialItemsToShow && (
+              <Box
+                onClick={handleExpandClick}
+                sx={{
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                  padding: "10px",
+                  alignItem: "right",
+                  backgroundColor: "ButtonFace",
+                  transition: "background-color 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "#88c8fc",
+                  },
+                }}
+              >
+                <Typography>{expanded ? "Show Less" : "Show More"}</Typography>
+                <ExpandMoreIcon
+                  sx={{
+                    transform: !expanded ? "rotate(0deg)" : "rotate(180deg)",
+                  }}
+                />
+              </Box>
+            )}
+          </CardActions>
         </Card>
-
       </section>
     </article>
   );
