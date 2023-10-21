@@ -5,6 +5,8 @@ import { Link as RouterLink } from "react-router-dom";
 import { Button, Checkbox, Paper, TextField, Link } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+// import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+// import { useDemoData } from '@mui/x-data-grid-generator';
 
 import styles from "./Home.module.css";
 
@@ -15,6 +17,8 @@ const Home = () => {
   const [savedList, setSavedList] = useState<Array<Beer>>([]);
   const [filterText, setFilterText] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [sortBy, setSortBy] = useState<string | null>(null);
+
 
   const totalPages = Math.ceil(beerList.length / ITEMS_PER_PAGE);
 
@@ -26,14 +30,36 @@ const Home = () => {
     setCurrentPage(1);
   };
 
+  const handleSort = (criteria: string) => {
+    setSortBy(criteria);
+
+    setCurrentPage(1);
+  };
+
+  const sortBeerList = (list: Beer[]) => {
+    if (sortBy === 'name') {
+      return list.slice().sort((a, b) => a.name.localeCompare(b.name));
+    }
+    return list;
+  };
+
+
+
+
   const filteredBeerList = beerList.filter((beer) =>
     beer.name.toLowerCase().includes(filterText.toLowerCase())
   );
 
+  const sortedBeerList = sortBeerList(filteredBeerList);
+
+
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
 
-  const currentBeerList = filteredBeerList.slice(startIndex, endIndex);
+  // const currentBeerList = filteredBeerList.slice(startIndex, endIndex);
+
+  const currentBeerList = sortedBeerList.slice(startIndex, endIndex);
+
 
   return (
     <article>
@@ -48,6 +74,13 @@ const Home = () => {
                   value={filterText}
                   onChange={handleFilterChange}
                 />
+
+{/* <DataGrid rows={rows} columns={columns} /> */}
+
+<Button variant="contained" onClick={() => handleSort('name')}>
+                  Sort by Name
+                </Button>
+              
                 <Button variant="contained">Reload list</Button>
               </div>
 
