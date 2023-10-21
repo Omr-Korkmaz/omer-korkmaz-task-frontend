@@ -8,9 +8,19 @@ import styles from './Home.module.css';
 const Home = () => {
   const [beerList, setBeerList] = useState<Array<Beer>>([]);
   const [savedList, setSavedList] = useState<Array<Beer>>([]);
+  const [filterText, setFilterText] = useState<string>('');
+
 
   // eslint-disable-next-line
   useEffect(fetchData.bind(this, setBeerList), []);
+
+  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterText(event.target.value);
+  };
+
+  const filteredBeerList = beerList.filter((beer) =>
+    beer.name.toLowerCase().includes(filterText.toLowerCase())
+  );
 
   return (
     <article>
@@ -19,11 +29,18 @@ const Home = () => {
           <Paper>
             <div className={styles.listContainer}>
               <div className={styles.listHeader}>
-                <TextField label='Filter...' variant='outlined' />
+                {/* <TextField label='Filter...' variant='outlined' /> */}
+                <TextField
+                  label='Filter...'
+                  variant='outlined'
+                  value={filterText}
+                  onChange={handleFilterChange}
+                />
                 <Button variant='contained'>Reload list</Button>
               </div>
+
               <ul className={styles.list}>
-                {beerList.map((beer, index) => (
+                {filteredBeerList.map((beer, index) => (
                   <li key={index.toString()}>
                     <Checkbox />
                     <Link component={RouterLink} to={`/beer/${beer.id}`}>
@@ -32,6 +49,17 @@ const Home = () => {
                   </li>
                 ))}
               </ul>
+
+              {/* <ul className={styles.list}>
+                {beerList.map((beer, index) => (
+                  <li key={index.toString()}>
+                    <Checkbox />
+                    <Link component={RouterLink} to={`/beer/${beer.id}`}>
+                      {beer.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul> */}
             </div>
           </Paper>
 
