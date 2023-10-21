@@ -23,7 +23,7 @@ const BeerList = () => {
   useEffect(fetchData.bind(this, setBeerList), []);
 
   
-  const totalPages = Math.ceil(beerList.length / ITEMS_PER_PAGE);
+  // const totalPages = Math.ceil(beerList.length / ITEMS_PER_PAGE);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
@@ -96,7 +96,9 @@ const BeerList = () => {
                     <SportsBar />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={beer.name} secondary={beer.brewery_type} />
+                {/* <ListItemText primary={beer.name} secondary={beer.brewery_type} /> */}
+                <ListItemText primary={`${beer.name} ${beer.city}`} secondary={beer.brewery_type}  />
+
               </ListItemButton>
             ))}
           </List>
