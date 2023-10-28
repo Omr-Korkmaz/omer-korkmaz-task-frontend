@@ -123,7 +123,7 @@ const BeerList = () => {
     <article>
       <section>
         <header>
-          <h1>BeerList page</h1>
+          <h1>Beer List</h1>
         </header>
         <main>
           <div style={{ height: 400, width: "100%" }}>

@@ -6,6 +6,19 @@ import { ThemeProvider } from '@emotion/react';
 import { theme } from './styles/theme';
 import './styles/global.css';
 
+
+if ("serviceWorker" in navigator) {
+  // Register the service worker
+  navigator.serviceWorker
+    .register("/service-worker.js")
+    .then((registration) => {
+      console.log("Service Worker registered with scope:", registration.scope);
+    })
+    .catch((error) => {
+      console.error("Service Worker registration failed:", error);
+    });
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
