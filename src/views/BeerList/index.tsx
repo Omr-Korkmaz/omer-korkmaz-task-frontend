@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import styles from "./BeerList.module.css";
+import { DataGrid } from '@mui/x-data-grid';
+
 
 
 const ITEMS_PER_PAGE = 15;
@@ -54,13 +56,78 @@ const BeerList = () => {
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-
-  // const currentBeerList = filteredBeerList.slice(startIndex, endIndex);
-
   const currentBeerList = sortedBeerList.slice(startIndex, endIndex);
 
-
   const onBeerClick = (id: string) => navigate(`/beer/${id}`);
+
+
+
+
+
+
+
+
+
+
+  const columns = [
+    // { field: 'id', headerName: 'ID', width: 190 },
+    {
+      field: 'Order',
+      Name: 'Order',
+      width: 70,
+      editable: true,
+    },
+    {
+      field: 'Name',
+      Name: 'Name',
+      width: 150,
+      editable: true,
+    },
+    {
+      field: 'Type',
+      headerName: 'Type',
+      width: 100,
+      editable: true,
+    },
+    {
+      field: 'City',
+      headerName: 'City',
+      type: 'number',
+      width: 150,
+      editable: true,
+    },
+    {
+      field: 'Country',
+      headerName: 'Country',
+      type: 'number',
+      width: 150,
+      editable: true,
+    },
+    {
+      field: 'Phone',
+      headerName: 'Phone',
+      type: 'number',
+      width: 150,
+      editable: true,
+    },
+   
+   
+  ];
+
+
+
+  const rows = beerList.map((beer, index) => ({
+    Order: index + 1,
+    id: beer.id,
+    Name: beer.name,
+    Type: beer.brewery_type,
+    City: beer.city,
+    Country: beer.country,
+    Phone: beer.phone
+
+  }));
+
+
 
   return (
     <article>
@@ -69,6 +136,19 @@ const BeerList = () => {
           <h1>BeerList page</h1>
         </header>
         <main>
+
+
+        <div style={{ height: 400, width: '100%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        checkboxSelection={false} 
+        // pageSize={5}
+        // rowsPerPageOptions={[5]}
+      />
+    </div>
+
+
 
         <div>
                 <TextField
