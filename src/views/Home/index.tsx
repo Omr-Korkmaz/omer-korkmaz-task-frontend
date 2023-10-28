@@ -69,9 +69,6 @@ const filteredBeer = beerList.filter((beer) =>
               value={filterText}
               onChange={handleFilterChange}
             />
-
-
-                <TextField label="Filter..." variant="outlined" />
                 <Button variant="contained" onClick={handleReload}>
                   Reload list
                 </Button>
