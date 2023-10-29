@@ -11,13 +11,11 @@ const Home = () => {
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
-    // setCurrentPage(1);
   };
 
-const filteredBeer = beerList.filter((beer) =>
+  const filteredBeer = beerList.filter((beer) =>
     beer.name.toLowerCase().includes(filterText.toLowerCase())
   );
-  // const [savedList, setSavedList] = useState<Array<Beer>>([]);
   const getSavedListStorage = () => {
     const savedListStorage = localStorage.getItem("savedList");
     return savedListStorage ? JSON.parse(savedListStorage) : [];
@@ -48,10 +46,6 @@ const filteredBeer = beerList.filter((beer) =>
     }
   };
 
-  // const filteredBeerList = beerList.filter(
-  //   (beer) => !savedList.some((savedBeer) => savedBeer.id === beer.id)
-  // );
-
   const handleReload = () => {
     window.location.reload();
   };
@@ -63,12 +57,12 @@ const filteredBeer = beerList.filter((beer) =>
           <Paper>
             <div className={styles.listContainer}>
               <div className={styles.listHeader}>
-              <TextField
-              label="Filter..."
-              variant="outlined"
-              value={filterText}
-              onChange={handleFilterChange}
-            />
+                <TextField
+                  label="Filter..."
+                  variant="outlined"
+                  value={filterText}
+                  onChange={handleFilterChange}
+                />
                 <Button variant="contained" onClick={handleReload}>
                   Reload list
                 </Button>
@@ -76,8 +70,6 @@ const filteredBeer = beerList.filter((beer) =>
               <ul className={styles.list}>
                 {filteredBeer.map((beer, index) => (
                   <li key={index.toString()}>
-                    {/* <Checkbox /> */}
-
                     <Checkbox
                       checked={savedList.some(
                         (savedBeer) => savedBeer.id === beer.id
@@ -109,8 +101,6 @@ const filteredBeer = beerList.filter((beer) =>
               <ul className={styles.list}>
                 {savedList.map((beer, index) => (
                   <li key={index.toString()}>
-                    {/* <Checkbox /> */}
-
                     <Checkbox
                       checked={savedList.some(
                         (savedBeer) => savedBeer.id === beer.id

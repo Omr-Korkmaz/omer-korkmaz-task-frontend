@@ -46,10 +46,27 @@ const Beer = () => {
     ? detailsToDisplay
     : detailsToDisplay.slice(0, initialItemsToShow);
 
+  useEffect(() => {
+    const iframeData = document.getElementById("iframeId") as HTMLIFrameElement;
+    const lat = beer?.latitude;
+    const lon = beer?.longitude;
+
+    if (iframeData) {
+      iframeData.src = `https://maps.google.com/maps?q=${lat},${lon}&hl=es;&output=embed`;
+    }
+  }, [beer]);
+
   return (
     <article>
-      <section>
-        <Card sx={{ maxWidth: 500 }}>
+      <section
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          gap: "30px",
+        }}
+      >
+        <Card sx={{ width: "40%", height: "100%" }}>
           <CardHeader title={beer?.name} />
 
           <CardContent sx={{ paddingBottom: "0" }}>
@@ -104,6 +121,13 @@ const Beer = () => {
             )}
           </CardActions>
         </Card>
+        <Box sx={{ width: "60%" }}>
+          {beer?.latitude && beer?.longitude ? (
+            <iframe id="iframeId" height="500px" width="100%"></iframe>
+          ) : (
+            <h2>No available MAP for the selected beer</h2>
+          )}
+        </Box>
       </section>
     </article>
   );
