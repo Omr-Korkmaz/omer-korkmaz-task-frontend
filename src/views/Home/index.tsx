@@ -68,8 +68,8 @@ const Home = () => {
                 </Button>
               </div>
               <ul className={styles.list}>
-                {filteredBeer.map((beer, index) => (
-                  <li key={index.toString()}>
+                {filteredBeer.map((beer) => (
+                  <li key={ beer.id}>
                     <Checkbox
                       checked={savedList.some(
                         (savedBeer) => savedBeer.id === beer.id
