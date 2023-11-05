@@ -31,7 +31,7 @@ const Beer = () => {
 
   const initialItemsToShow = 4;
 
-  const detailsToDisplay = [
+  const fieldsToDisplay = [
     { label: "Type", value: beer?.brewery_type },
     { label: "Website", value: beer?.website_url },
     { label: "Phone", value: beer?.phone },
@@ -43,8 +43,8 @@ const Beer = () => {
   ];
 
   const itemsToShow = expanded
-    ? detailsToDisplay
-    : detailsToDisplay.slice(0, initialItemsToShow);
+    ? fieldsToDisplay
+    : fieldsToDisplay.slice(0, initialItemsToShow);
 
   useEffect(() => {
     const iframeData = document.getElementById("iframeId") as HTMLIFrameElement;
@@ -71,30 +71,37 @@ const Beer = () => {
 
           <CardContent sx={{ paddingBottom: "0" }}>
             <Box>
-              {itemsToShow.map((detail, index) => (
-                <Typography key={index}>
-                  <span style={{ fontWeight: "bold" }}>{detail.label}:</span>{" "}
-                  {detail.value}
+              {itemsToShow.map((beer, index) => (
+                // good idea to use id 
+                <Box  key={index}> 
+                  <Typography>
+                    <span style={{ fontWeight: "bold" }}>{beer.label}:</span>{" "}
+                    {beer.value}
+                  </Typography>
                   <Divider sx={{ margin: "10px" }} />
-                </Typography>
+                </Box>
               ))}
             </Box>
           </CardContent>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent sx={{ paddingTop: "0" }}>
-              {detailsToDisplay
+              {fieldsToDisplay
                 .slice(initialItemsToShow)
-                .map((detail, index) => (
-                  <Typography key={index}>
-                    <span style={{ fontWeight: "bold" }}>{detail.label}:</span>{" "}
-                    {detail.value}
+                .map((field, index) => (
+                  <Box  key={index}>
+                    <Typography>
+                      <span style={{ fontWeight: "bold" }}>
+                        {field.label}:
+                      </span>{" "}
+                      {field.value}
+                    </Typography>
                     <Divider sx={{ margin: "10px" }} />
-                  </Typography>
+                  </Box>
                 ))}
             </CardContent>
           </Collapse>
           <CardActions>
-            {detailsToDisplay.length > initialItemsToShow && (
+            {fieldsToDisplay.length > initialItemsToShow && (
               <Box
                 onClick={handleExpandClick}
                 sx={{
