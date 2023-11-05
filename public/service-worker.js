@@ -1,9 +1,10 @@
-const CACHE_NAME = "my-cache";
-const urlsToCache = ["", "/index.html", "/offline"];
+const CACHE_VIEW = "my-cache";
+const urlsToCache = ['/', '/index.html', '/beer',  '/offline', '/manifest.json'];
+
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
+    caches.open(CACHE_VIEW).then((cache) => {
       return cache.addAll(urlsToCache);
     })
   );
